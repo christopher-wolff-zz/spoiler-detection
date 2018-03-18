@@ -27,10 +27,11 @@ years = [2015, 2016, 2017]
 for year in years:
 	for page in pages:
 		url = 'http://www.imdb.com/search/title'
-		payload = {'year': year, 'sort':'num_votes,desc', 'view': 'advanced',
+		payload = {'release_date':year, 'sort':'num_votes,desc', 'view': 'advanced',
 		'page':page, 'ref_': 'adv_prv', 'languages': 'en'
 		}
 		response2 = requests.get(url, params = payload)
+		print response2.url
 		html_soup = BeautifulSoup(response2.text, 'html.parser')
 		type(html_soup)
 		movie_containers = html_soup.find_all('div', class_ = 'lister-item mode-advanced')
@@ -47,7 +48,6 @@ for year in years:
         		imdb = float(container.strong.text)
         		imdb_ratings.append(imdb)
         		print(imdb)
-        		# The Metascore
         		# The number of votes
         		vote = container.find('span', attrs = {'name':'nv'})['data-value']
        	 		votes.append(int(vote))
