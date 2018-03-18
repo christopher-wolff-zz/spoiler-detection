@@ -1,5 +1,4 @@
 import math
-from pprint import pprint
 import requests
 from bs4 import BeautifulSoup
 
@@ -15,6 +14,17 @@ for year in years:
         url = 'http://www.imdb.com/search/title'
         payload = {'year': year, 'sort': 'num_votes,desc',
                    'view': 'advanced', 'page': page, 'ref_': 'adv_prv',
-                   'languages': 'en'}
+                   'languages': 'en', 'title_type': 'feature'}
         response = requests.get(url, params=payload)
         soup = BeautifulSoup(response.text, 'html.parser')
+        movie_divs = soup.find_all('div', class_='lister-item-content')
+        for movie_div in movie_divs:
+            movie = {}
+            movie['name'] = movie_div.h3.a.text
+            movie['year'] = year
+            movie['rating'] = float(movie_div.strong.text)
+            movie['votes'] = movie_div.find('span', attrs={'name': 'nv'})['data-value']
+            movies.append(movie)
+
+for movie in movies:
+    print(movie)
