@@ -40,32 +40,28 @@ def scrape_reviews(movies) -> list:
     """..."""
     reviews = list()
     for k, movie in enumerate(movies):
-        print('Scraping reviews for movie %d: ' % (k + 1), end='')
+        print('Movie %d: ' % (k + 1), end='')
         question_mark_index = movie['url'].find('?')
         review_url = movie['url'][:question_mark_index] + 'reviews'
         review_params = {'sort': 'helpfulnessScore', 'dir': 'desc'}
         review_response = requests.get(review_url, params=review_params)
         print(review_response.url)
         review_soup = BeautifulSoup(review_response.text, 'html.parser')
-        reviews = list()
         for review_div in review_soup.find_all('div', class_='lister-item-content'):
             review = dict()
             rating = review_div.find('span', class_='rating-other-user-rating')
-            if rating is None:
+            if not rating:
                 continue
             review['rating'] = int(rating.find('span').text)
             review['title'] = review_div.find('div', class_='title').text
             review['date'] = review_div.find('span', class_='review-date').text
             review['text'] = review_div.find('div', class_=["text show-more__control", "text show-more__control clickable"])
+            review['movie_id'] = movie['id']
             reviews.append(review)
-        movie.update({'reviews': reviews})
+    return reviews
 
 
 if __name__ == '__main__':
     movies = scrape_movies()
-    scrape_reviews(movies)
-    n = 0
-    for movie in movies:
-        print(len(movie['reviews']))
-        n += len(movie['reviews'])
-    print(n)
+    reviews = scrape_reviews(movies)
+    print('Found %d movies and %d reviews' % (len(movies), len(reviews)))
