@@ -1,4 +1,6 @@
+import csv
 import requests
+
 from bs4 import BeautifulSoup
 
 years = range(2008, 2018)
@@ -7,7 +9,7 @@ movies_per_year = 100
 base_url = 'http://www.imdb.com'
 
 
-def scrape_movies() -> list:
+def scrape_movies():
     """..."""
     movies = list()
     for year in years:
@@ -36,7 +38,7 @@ def scrape_movies() -> list:
     return movies
 
 
-def scrape_reviews(movies) -> list:
+def scrape_reviews(movies):
     """..."""
     reviews = list()
     for k, movie in enumerate(movies):
@@ -61,7 +63,14 @@ def scrape_reviews(movies) -> list:
     return reviews
 
 
+def export_to_csv(obj, file_name):
+    """Export a list of dictionaries to a comma-seperated value file."""
+    pass
+
+
 if __name__ == '__main__':
     movies = scrape_movies()
     reviews = scrape_reviews(movies)
     print('Found %d movies and %d reviews' % (len(movies), len(reviews)))
+    # export_to_csv(movies, 'movies.csv')
+    # export_to_csv(reviews, 'reviews.csv')
