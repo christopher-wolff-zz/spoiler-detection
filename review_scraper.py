@@ -28,6 +28,7 @@ for year in years:
 for movie in movies:
     question_mark_index = movie['url'].find('?')
     review_url = base_url + movie['url'][:question_mark_index] + 'reviews'
-    review_response = requests.get(review_url)
+    review_params = {'sort': 'helpfulnessScore', 'dir': 'desc'}
+    review_response = requests.get(review_url, params=review_params)
     review_soup = BeautifulSoup(review_response.text, 'html.parser')
     print(review_soup)
