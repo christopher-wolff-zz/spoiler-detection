@@ -7,7 +7,7 @@ movies_per_year = 100
 base_url = 'http://www.imdb.com'
 
 
-def scrape_movies():
+def scrape_movies() -> list:
     """..."""
     movies = list()
     for year in years:
@@ -25,19 +25,24 @@ def scrape_movies():
             movie['year'] = year
             movie['rating'] = float(movie_div.strong.text)
             movie['votes'] = movie_div.find('span', attrs={'name': 'nv'})['data-value']
-            movie['url'] = movie_div.h3.a['href']
+            movie['url'] = base_url + movie_div.h3.a['href']
+            id_index_start = movie['url'].find('title') + 8
+            url_temp = movie['url'][id_index_start:]
+            id_index_end = url_temp.find('/')
+            movie['id'] = url_temp[:id_index_end]
             movies.append(movie)
             if (k + 1) % 10 == 0:
                 print('Finished scraping %d movies' % (k + 1))
     return movies
 
 
-def scrape_reviews(movies):
+def scrape_reviews(movies) -> list:
     """..."""
+    reviews = list()
     for k, movie in enumerate(movies):
-        print('Movie %d: ' % (k + 1), end='')
+        print('Scraping reviews for movie %d: ' % (k + 1), end='')
         question_mark_index = movie['url'].find('?')
-        review_url = base_url + movie['url'][:question_mark_index] + 'reviews'
+        review_url = movie['url'][:question_mark_index] + 'reviews'
         review_params = {'sort': 'helpfulnessScore', 'dir': 'desc'}
         review_response = requests.get(review_url, params=review_params)
         print(review_response.url)
