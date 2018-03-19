@@ -1,4 +1,5 @@
 import csv
+import json
 import requests
 
 from bs4 import BeautifulSoup
@@ -9,7 +10,7 @@ movies_per_year = 100
 base_url = 'http://www.imdb.com'
 
 
-def scrape_movies():
+def scrape_movies() -> list:
     """..."""
     movies = list()
     for year in years:
@@ -38,7 +39,7 @@ def scrape_movies():
     return movies
 
 
-def scrape_reviews(movies):
+def scrape_reviews(movies) -> list:
     """..."""
     reviews = list()
     for k, movie in enumerate(movies):
@@ -64,13 +65,25 @@ def scrape_reviews(movies):
 
 
 def export_to_csv(obj, file_name):
-    """Export a list of dictionaries to a comma-seperated value file."""
-    pass
+    """Export a list of dictionaries to a csv file."""
+    keys = obj[0].keys()
+    with open(file_name, 'wb') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(obj)
+
+
+def export_to_json(obj, file_name):
+    """Export a list of dictionaries to a json file."""
+    with open(file_name, 'wb') as output_file:
+        json.dump(obj, output_file)
 
 
 if __name__ == '__main__':
     movies = scrape_movies()
     reviews = scrape_reviews(movies)
     print('Found %d movies and %d reviews' % (len(movies), len(reviews)))
-    # export_to_csv(movies, 'movies.csv')
-    # export_to_csv(reviews, 'reviews.csv')
+    export_to_csv(movies, 'movies.csv')
+    export_to_csv(reviews, 'reviews.csv')
+    export_to_json(movies, 'movies.json')
+    export_to_json(reviews, 'reviews.json')
