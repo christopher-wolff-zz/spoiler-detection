@@ -1,4 +1,4 @@
-"""A web scraper for IMDB."
+"""A web scraper for IMDB.
 
 1. We used the BeautifulSoup python package for web scrap data
 to scrape the most popular movies (top 100) from the specified years from the IMDb.
