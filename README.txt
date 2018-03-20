@@ -21,4 +21,7 @@ With about 12,000 movies released in between 2017 and 2008, we decided to limit 
 
 
 Where from?
+All of the reviews are user reviews on the IMDb website. The links to these reviews can be found in the reviews_raw files (either .csv or .json).
+
+License:
 This data is made available under the Public Domain Dedication and License v1.0 whose full text can be found at: http://www.opendatacommons.org/licenses/pddl/1.0/
