@@ -16,7 +16,7 @@ base_url = 'http://www.imdb.com'
 
 
 def scrape_movies(years, num_movies=100, debug=False) -> list:
-    """Scrape the most popular movies from the specified years from IMDB.
+    """Scrape the most popular movies from the specified years from IMDb.
 
     The method collects the unique identification number, name, year, average
     rating, total number of votes, and url for each movie. Only English movies
@@ -62,7 +62,7 @@ def scrape_movies(years, num_movies=100, debug=False) -> list:
 
 
 def scrape_reviews(movies, debug=False) -> list:
-    """Scrape the most helpful reviews for the given movies from IMDB.
+    """Scrape the most helpful reviews for the given movies from IMDb.
 
     The method collects the 25 most helpful reviews for each movie, but discards
     those that do not have a rating. It collects the title, date, rating, full
