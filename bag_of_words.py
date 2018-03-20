@@ -11,7 +11,9 @@ def create_bow(reviews, debug=False) -> dict:
 
     Filters out stop words. Each key represents a word that appears in the
     review and the corresponding value represents the number of times that word
-    appears in all reviews."""
+    appears in all reviews.
+
+    """
     bag_of_words = dict()
     stop_words = stopwords.words('english')
     for k, review in enumerate(reviews):
