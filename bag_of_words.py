@@ -1,4 +1,31 @@
-"""Tools for creating a bag of words from a cleaned list of reviews."""
+"""Tools for creating a bag of words from a cleaned list of reviews.
+
+The output for our dataset, sorted in descending order of term frequency and
+only displaying the top 20 rows, is:
+
+rank term  frequency
+1    movie      63280
+2    film       51570
+3    one        29273
+4    like       26828
+5    story      19087
+6    good       18377
+7    would      17940
+8    really     16689
+9    even       16102
+10   see        15690
+11   time       15504
+12   much       14012
+13   character  13035
+14   well       12913
+15   could      12733
+16   characters 12664
+17   get        12628
+18   first      12438
+19   people     12034
+20   great      11945
+
+"""
 
 
 import csv
