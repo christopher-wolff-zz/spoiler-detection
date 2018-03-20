@@ -4,6 +4,7 @@ __version__ = '0.1'
 __date__ = '3/19/2018'
 
 
+from datetime import date
 import json
 # import nltk
 # nltk.download()
@@ -31,6 +32,16 @@ def clean(reviews, debug=False):
         text_tokens = word_tokenize(review['text'])
         text_words = [word.lower() for word in text_tokens if word.isalpha()]
         review['text'] = ' '.join(text_words)
+        # standardize date
+        month_to_num = {'January': '01', 'February': '02', 'March': '03',
+                        'April': '04', 'May': '05', 'June': '06', 'July': '07',
+                        'August': '08', 'September': '09', 'October': '10',
+                        'November': '11', 'December': '12'}
+        (day, month, year) = review['date'].split(' ')
+        if len(day) == 1:
+            day = '0' + day
+        month = month_to_num[month]
+        review['date'] = year + '-' + month + '-' + day
 
         if debug and (k + 1) % 100 == 0:
             print('Finished cleaning %d reviews' % (k + 1))
