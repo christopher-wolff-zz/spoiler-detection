@@ -1,3 +1,10 @@
+"""A web scraper for IMDB."""
+
+
+__version__ = '0.1'
+__date__ = '3/19/2018'
+
+
 import csv
 import json
 import requests
