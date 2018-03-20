@@ -33,7 +33,7 @@ def clean(reviews, debug=False):
     for k, review in enumerate(reviews):
         # get rid of commas in numeric values
         review['num_helpful_yes'] = review['num_helpful_yes'].replace(',', '')
-        review['num_helpful_total'] = review['num_helpful_yes'].replace(',', '')
+        review['num_helpful_total'] = review['num_helpful_total'].replace(',', '')
         # tokenize title and remove punctuation
         title_tokens = word_tokenize(review['title'])
         title_words = [word.lower() for word in title_tokens if word.isalpha()]
