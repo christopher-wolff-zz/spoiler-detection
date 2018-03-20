@@ -1,6 +1,5 @@
 """Data cleaning for movie text data.
 
-<<<<<<< HEAD
 The overall data cleaning process invloves removing punctuation, making
 everything lower case, and tokenizing the text from titles and the actual
 reviews themselves. num_helpful_yes gets rid of commas and numbers and replace
@@ -11,19 +10,6 @@ Cleaner word tokenizes the entire text with NLTK and then filters out all of the
 tokens that are alphabetic. We then convert everything to lowercase and then
 join all of the tokens together to one string separated by spaces.
 
-=======
-The overall data cleaning process invloves removing punctuation, 
-making everything lower case, and tokenizing the text from titles and the actual reviews themselves. 
-num_helpful_yes gets rid of commas and numbers and replace with empty character. 
-This is because the numerical values sometimes have commas in them.
-It also converts dates from the movies into standardized date syntax — ISO 8601.
-An example of this would be changing 24 July 2008 into 2008-07-24.
-
-Clean word tokenizes the entire text with NLTK 
-and then filters out all the tokens that are alphabetic. 
-We then convert everything to lowercase and then join all the tokens together
-to one string separated by spaces. 
->>>>>>> 3ab4b5eee001dc340be802bd9e1c91eb09aeac74
 """
 
 
@@ -32,8 +18,6 @@ __date__ = '3/19/2018'
 
 
 import json
-# import nltk
-# nltk.download()
 from nltk.tokenize import word_tokenize
 
 from helper import export_to_csv
