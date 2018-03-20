@@ -4,7 +4,7 @@ Aaron DePass (team leader), Christopher Wolff, Jason Akers, Joungwon Kwon, Rob A
 What?
 We want to do a sentiment analysis of movie reviews on IMDb, especially on negatively- and positively-coded words, in order to see whether there is a correlation between the sentiment of reviews and the ratings they have, and how we can thoroughly analyze this potential connection. We have begun by looking through reviews on IMDb for the top 100 rated feature films that have been shown in English between 2008 and 2017. The top 100 were chosen because past that point, there are not many reviews for movies. We are also only looking at the 25 most helpful reviews, both because of the larger potential for trolls further down. This has given us 23,000 reviews to work with.
 
-When?
+Where?
 We have chosen the top 100 rated feature films for each chosen year, from the years 2008 to 2017.
 
 Where?
@@ -21,5 +21,5 @@ With about 12,000 movies released in between 2017 and 2008, we decided to limit 
 Although an argument may be that we would get only positive reviews — this is not true. We are collecting data from the top 100 most rated movies, not the top 100 movies. Furthermore, we are collecting data from the top 25 most helpful reviews. This means that users voted “yes, this review was helpful” or “no, this review wasn’t helpful”. This means that regardless if the review was positive or negative people could still rate it helpful or not. 
 
 
-Where from?
-This data is made available under the Public Domain Dedication and License v1.0 whose full text can be found at: http://www.opendatacommons.org/licenses/pddl/1.0/
+Licensing:
+We plan to release this data under the Public Domain Dedication and License v1.0 whose full text can be found at: http://www.opendatacommons.org/licenses/pddl/1.0/
