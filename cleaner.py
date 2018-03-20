@@ -1,4 +1,16 @@
-"""Data cleaning for movie text data."""
+"""Data cleaning for movie text data.
+
+The overall data cleaning process invloves removing punctuation, 
+making everything lower case, and tokenizing the text from titles and the actual reviews themselves. 
+num_helpful_yes gets rid of commas and numbers and replace with empty character. 
+This is because the numerical values sometimes have commas in them.
+Cleaner word tokenizes the entire text with NLTK 
+and then filters out all the tokens that are alphabetic. 
+We then convert everything to lowercase and then join all the tokens together
+to one string separated by spaces. 
+
+"""
+
 
 __version__ = '0.1'
 __date__ = '3/19/2018'
