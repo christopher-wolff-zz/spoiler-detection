@@ -44,8 +44,8 @@ def scrape_movies(years, num_movies=100, debug=False) -> list:
         response = requests.get(url, params=payload)
         if debug:
             print('Movie URL: ' + response.url)
-        movie_soup = BeautifulSoup(response.text, 'html.parser')
-        for k, movie_div in enumerate(movie_soup.find_all('div', class_='lister-item-content')):
+        soup = BeautifulSoup(response.text, 'html.parser')
+        for k, movie_div in enumerate(soup.find_all('div', class_='lister-item-content')):
             movie = dict()
             temp_1 = movie_div.h3.a['href']  # /title/tt...
             temp_2 = temp_1[9:]  # id starts at 9th character
@@ -85,13 +85,13 @@ def scrape_reviews(movies, debug=False) -> list:
         if debug:
             print('Movie %d: ' % (k + 1), end='')
         question_mark_index = movie['url'].find('?')
-        review_url = movie['url'][:question_mark_index] + 'reviews'
-        review_params = {'sort': 'helpfulnessScore', 'dir': 'desc'}
-        review_response = requests.get(review_url, params=review_params)
+        url = movie['url'][:question_mark_index] + 'reviews'
+        payload = {'sort': 'helpfulnessScore', 'dir': 'desc'}
+        response = requests.get(url, params=payload)
         if debug:
-            print(review_response.url)
-        review_soup = BeautifulSoup(review_response.text, 'html.parser')
-        for review_div in review_soup.find_all('div', class_='lister-item-content'):
+            print(response.url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        for review_div in soup.find_all('div', class_='lister-item-content'):
             review = dict()
             rating = review_div.find('span', class_='rating-other-user-rating')
             if not rating:
@@ -104,7 +104,7 @@ def scrape_reviews(movies, debug=False) -> list:
             review['text'] = review_div.find('div', class_=["text show-more__control", "text show-more__control clickable"]).text
             review['num_helpful_yes'] = tokens[0]
             review['num_helpful_total'] = tokens[3]
-            review['url'] = review_url
+            review['url'] = url
             review['movie_id'] = movie['id']
             reviews.append(review)
     return reviews
