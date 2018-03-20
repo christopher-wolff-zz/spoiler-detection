@@ -5,11 +5,11 @@ __version__ = '0.1'
 __date__ = '3/19/2018'
 
 
-import csv
-import json
-
 import requests
 from bs4 import BeautifulSoup
+
+from helper import export_to_csv
+from helper import export_to_json
 
 
 base_url = 'http://www.imdb.com'
@@ -108,35 +108,6 @@ def scrape_reviews(movies, debug=False) -> list:
             review['movie_id'] = movie['id']
             reviews.append(review)
     return reviews
-
-
-def export_to_csv(obj, file_name):
-    """Export a list of dictionaries to a csv file.
-
-    Args:
-    =====
-    obj (list): A list of dictionaries representing the object to be exported
-    file_name (str): The destination file name
-
-    """
-    keys = obj[0].keys()
-    with open(file_name, 'w') as output_file:
-        dict_writer = csv.DictWriter(output_file, keys)
-        dict_writer.writeheader()
-        dict_writer.writerows(obj)
-
-
-def export_to_json(obj, file_name):
-    """Export a list of dictionaries to a json file.
-
-    Args:
-    =====
-    obj (list): A list of dictionaries representing the object to be exported
-    file_name (str): The destination file name
-
-    """
-    with open(file_name, 'w') as output_file:
-        json.dump(obj, output_file)
 
 
 if __name__ == '__main__':
