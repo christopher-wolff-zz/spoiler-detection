@@ -1,7 +1,7 @@
-"""A helper module containing methods for exporting data."
+"""A helper module containing methods for exporting data.
 
-This moduel is used to export to all the write formats CSV and JSON in order to scrape properly. 
-""
+Provides the necessary tools to export an object to either a csv or json file.
+"""
 
 
 import csv
