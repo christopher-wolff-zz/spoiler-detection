@@ -1,4 +1,26 @@
-"""A web scraper for IMDB."""
+"""A web scraper for IMDB."
+
+1. We used the Beautiful Soup python package for web scrap data
+to scrape the most popular movies (top 100) from the specified years from the IMDb. 
+The method collects the unique identification number, name, year, average rating,
+total number of votes, and URL for each movie. Only English movies that were categorized
+as feature films are considered. The arguments that are used here are years (list)
+which are the years to be considered, num_movies (int) which are the maximum number 
+of movies to be collected for each year, and debug (bool) which displays debug messages.  
+
+2. We scrapped the most helpful reviews for the given movies from IMDb. 
+The method collects the 25 most helpful reviews for each movie, but discards those that
+do not have a rating. It collects the title, date, rating, full text, number of people that found 
+the review helpful, total number of people who voted on the helpfulness of the review, URL, and the movie id. 
+The arguments that are used are movies (list) which are the movies of interest and debug (bool) 
+which are whether to display debug messages. It returns a list of dictionary objects representing the movies. 
+
+3. We exported a list of dictionaries to a csv file to save. The arguments that obj (list)
+is a list of dictionaries representing the object to be exported and file_name (str)
+is the destination file name. We exported a list of dictionaries to a json file, too. 
+The arguments are obj (list) which is a list of dictionaries representing the object
+to be exported and file_name (str) which is the destination file name.
+""
 
 
 __version__ = '0.1'
