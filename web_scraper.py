@@ -7,8 +7,8 @@ __date__ = '3/19/2018'
 
 import csv
 import json
-import requests
 
+import requests
 from bs4 import BeautifulSoup
 
 
