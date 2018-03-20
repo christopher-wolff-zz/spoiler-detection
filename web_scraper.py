@@ -31,6 +31,7 @@ def scrape_movies(years, num_movies=100, debug=False) -> list:
     Returns:
     ========
     A list of dictionary objects representing the movies
+
     """
     movies = list()
     for year in years:
@@ -77,6 +78,7 @@ def scrape_reviews(movies, debug=False) -> list:
     Returns:
     ========
     A list of review objects representing the reviews
+
     """
     reviews = list()
     for k, movie in enumerate(movies):
@@ -115,6 +117,7 @@ def export_to_csv(obj, file_name):
     =====
     obj (list): A list of dictionaries representing the object to be exported
     file_name (str): The destination file name
+
     """
     keys = obj[0].keys()
     with open(file_name, 'w') as output_file:
@@ -130,6 +133,7 @@ def export_to_json(obj, file_name):
     =====
     obj (list): A list of dictionaries representing the object to be exported
     file_name (str): The destination file name
+
     """
     with open(file_name, 'w') as output_file:
         json.dump(obj, output_file)
