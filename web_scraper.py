@@ -138,9 +138,7 @@ def scrape_reviews(movies, debug=False) -> list:
         broth = BeautifulSoup(main_content.text, 'lxml')
         while(broth.findAll('div', class_ = 'load-more-data')):
               for review_div in broth.find_all('div', class_='lister-item-content'):
-                spoiler = review_div.find('span', class_='spoiler-warning')
-                if not spoiler:
-                    continue     
+                spoiler = review_div.find('span', class_='spoiler-warning')   
                 review = dict()
                 rating = review_div.find('span', class_='rating-other-user-rating')
                 if not rating:
@@ -151,9 +149,11 @@ def scrape_reviews(movies, debug=False) -> list:
                 review['date'] = review_div.find('span', class_='review-date').text
                 review['rating'] = int(rating.find('span').text)
                 if not spoiler:
-                    review['spoiler'] = False
+                    review['spoiler'] = 0
+                    print("False")
                 else:
-                    review['spoiler'] = True
+                    review['spoiler'] = 1
+                    print("True")
                 review['text'] = review_div.find('div', class_=["text show-more__control", "text show-more__control clickable"]).text
                 review['num_helpful_yes'] = tokens[0]
                 review['num_helpful_total'] = tokens[3]
