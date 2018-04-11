@@ -138,9 +138,7 @@ def scrape_reviews(movies, debug=False) -> list:
         broth = BeautifulSoup(main_content.text, 'lxml')
         while(broth.findAll('div', class_ = 'load-more-data')):
               for review_div in broth.find_all('div', class_='lister-item-content'):
-                spoiler = review_div.find('span', class_='spoiler-warning')
-                if not spoiler:
-                    continue     
+                spoiler = review_div.find('span', class_='spoiler-warning')   
                 review = dict()
                 rating = review_div.find('span', class_='rating-other-user-rating')
                 if not rating:
@@ -151,9 +149,9 @@ def scrape_reviews(movies, debug=False) -> list:
                 review['date'] = review_div.find('span', class_='review-date').text
                 review['rating'] = int(rating.find('span').text)
                 if not spoiler:
-                    review['spoiler'] = False
+                    review['spoiler'] = 0
                 else:
-                    review['spoiler'] = True
+                    review['spoiler'] = 1
                 review['text'] = review_div.find('div', class_=["text show-more__control", "text show-more__control clickable"]).text
                 review['num_helpful_yes'] = tokens[0]
                 review['num_helpful_total'] = tokens[3]
@@ -170,8 +168,8 @@ def scrape_reviews(movies, debug=False) -> list:
 
 
 if __name__ == '__main__':
-    x = 2011
-    y = 2012
+    x = 1997
+    y = 1998
     num_movies = 0
     num_reviews = 0
     while(y <= 2018):
@@ -191,6 +189,12 @@ if __name__ == '__main__':
         with open(rnamejson, "a") as data:
             data.write(json.dumps(reviews))
             data.close()
+        with open('movies_rawV3.json', "a") as data:
+            data.write(json.dumps(movies))
+            data.close()
+        with open('reviews_rawV3.json', "a") as data:
+            data.write(json.dumps(reviews))
+            data.close()
         ##with open('movies_raw2.csv', "a") as data:
             ##data.write(movies)
            ## data.close()
@@ -199,6 +203,12 @@ if __name__ == '__main__':
             ##data.close()
         export_to_csv(movies, mnamecsv)
         export_to_csv(reviews, rnamecsv)
+        fd = open('movies_rawV3.csv', 'a')
+        fd.write(movies)
+        fd.close()
+        fp = open('reviews_rawV3.csv', 'a')
+        fp.write(reviews)
+        fp.close()
         ## export_to_json(movies, 'movies_raw2.json')
         ## export_to_json(reviews, 'reviews_raw2.json')
         x = x + 1
