@@ -71,11 +71,27 @@ def scrape_movies(years, num_movies=100, debug=False) -> list:
         soup = BeautifulSoup(response.text, 'html.parser')
         for k, movie_div in enumerate(soup.find_all('div', class_='lister-item-content')):
             movie = dict()
+            genres = []
+            movie_link = 'http://www.imdb.com' + movie_div.h3.a['href']
+            question_mark_index = movie_link.find('?')
+            keyLink = movie_link[:question_mark_index] + 'keywords?ref_=tt_stry_kw'
+            keyResponse = requests.get(keyLink)
+            keySoup = BeautifulSoup(keyResponse.text, 'html.parser')
+            
+            keys = [key.text for key in keySoup.findAll('div', class_ = 'sodatext')]
+
+            movieResponse = requests.get(movie_link)
+            movieSoup = BeautifulSoup(movieResponse.text, 'html.parser')
             temp_1 = movie_div.h3.a['href']  # /title/tt...
             temp_2 = temp_1[9:]  # id starts at 9th character
             movie['id'] = temp_2[:temp_2.find('/')]
             movie['name'] = movie_div.h3.a.text
             movie['year'] = year
+            movie['date'] = movieSoup.find('meta', itemprop ='datePublished')['content']
+            
+            genres = [genre.text for genre in movieSoup.findAll("span", itemprop="genre")]
+            movie['genres'] = genres
+            movie['keys'] = keys
             movie['avg_rating'] = float(movie_div.strong.text)
             movie['num_votes'] = int(movie_div.find('span', attrs={'name': 'nv'})['data-value'])
             movie['url'] = base_url + temp_1
@@ -116,12 +132,15 @@ def scrape_reviews(movies, debug=False) -> list:
         response = requests.get(url, params=payload)
         if debug:
             ## print(response.url)
-            print("URL2" + url2)
+            print("URL2: " + url2)
         soup = BeautifulSoup(response.text, 'html.parser')
         main_content = requests.get(url2)
         broth = BeautifulSoup(main_content.text, 'lxml')
         while(broth.findAll('div', class_ = 'load-more-data')):
               for review_div in broth.find_all('div', class_='lister-item-content'):
+                spoiler = review_div.find('span', class_='spoiler-warning')
+                if not spoiler:
+                    continue     
                 review = dict()
                 rating = review_div.find('span', class_='rating-other-user-rating')
                 if not rating:
@@ -131,6 +150,10 @@ def scrape_reviews(movies, debug=False) -> list:
                 review['title'] = review_div.find('div', class_='title').text
                 review['date'] = review_div.find('span', class_='review-date').text
                 review['rating'] = int(rating.find('span').text)
+                if not spoiler:
+                    review['spoiler'] = False
+                else:
+                    review['spoiler'] = True
                 review['text'] = review_div.find('div', class_=["text show-more__control", "text show-more__control clickable"]).text
                 review['num_helpful_yes'] = tokens[0]
                 review['num_helpful_total'] = tokens[3]
@@ -147,18 +170,25 @@ def scrape_reviews(movies, debug=False) -> list:
 
 
 if __name__ == '__main__':
-    x = 2003
-    y = 2004
+    x = 2011
+    y = 2012
+    num_movies = 0
+    num_reviews = 0
     while(y <= 2018):
-        mname = 'movies_raw' + str(x) + '.csv'
-        rname = 'reviews_raw' + str(y) + '.csv'
+        mnamecsv = 'movies_raw' + str(x) + '.csv'
+        rnamecsv = 'reviews_raw' + str(x) + '.csv'
+        mnamejson = 'movies_raw' + str(x) + '.json'
+        rnamejson = 'reviews_raw' + str(x) + '.json'
         movies = scrape_movies(years=range(x, y), num_movies=100, debug=True)
         reviews = scrape_reviews(movies, debug=True)
         print('Found %d movies and %d reviews' % (len(movies), len(reviews)))
-        with open('movies_raw2.json', "a") as data:
+        num_movies += len(movies)
+        num_reviews += len(reviews)
+        print('Found %d total movies and %d total reviews' % (num_movies, num_reviews))
+        with open(mnamejson, "a") as data:
             data.write(json.dumps(movies))
             data.close()
-        with open('reviews_raw2.json', "a") as data:
+        with open(rnamejson, "a") as data:
             data.write(json.dumps(reviews))
             data.close()
         ##with open('movies_raw2.csv', "a") as data:
@@ -167,8 +197,8 @@ if __name__ == '__main__':
         ##with open('reviews_raw2.csv', "a") as data:
             ##data.write(reviews)
             ##data.close()
-        export_to_csv(movies, mname)
-        export_to_csv(reviews, rname)
+        export_to_csv(movies, mnamecsv)
+        export_to_csv(reviews, rnamecsv)
         ## export_to_json(movies, 'movies_raw2.json')
         ## export_to_json(reviews, 'reviews_raw2.json')
         x = x + 1
