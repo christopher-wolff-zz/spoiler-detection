@@ -3,3 +3,4 @@ virtualenv/
 __pycache__/
 .Rproj.user
 .Rhistory
+*.Rproj
