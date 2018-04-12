@@ -9,19 +9,22 @@ import csv
 import json
 
 
-def export_to_csv(obj, file_name):
+def export_to_csv(obj, file_name, first):
     """Export a list of dictionaries to a csv file.
 
     Args:
     =====
     obj (list): A list of dictionaries representing the object to be exported
     file_name (str): The destination file name
+    first (boolean): Whether this is the first batch to be exported
 
     """
     keys = obj[0].keys()
-    with open(file_name, 'w') as output_file:
+    write_type = first ? 'w' : 'a'
+    with open(file_name, write_type) as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
-        dict_writer.writeheader()
+        if first:
+            dict_writer.writeheader()
         dict_writer.writerows(obj)
 
 
