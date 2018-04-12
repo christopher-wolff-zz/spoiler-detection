@@ -9,7 +9,7 @@ import csv
 import json
 
 
-def export_to_csv(obj, file_name, first):
+def export_to_csv(obj, file_name, first=False):
     """Export a list of dictionaries to a csv file.
 
     Args:
