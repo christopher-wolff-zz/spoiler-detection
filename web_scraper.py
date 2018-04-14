@@ -77,8 +77,8 @@ def scrape_movies(years, num_movies=100, debug=False) -> list:
             keyLink = movie_link[:question_mark_index] + 'keywords?ref_=tt_stry_kw'
             keyResponse = requests.get(keyLink)
             keySoup = BeautifulSoup(keyResponse.text, 'html.parser')
-            
-            keys = [key.text for key in keySoup.findAll('div', class_ = 'sodatext')]
+
+            keywords = [keyword.text for keyword in keySoup.findAll('div', class_ = 'sodatext')]
 
             movieResponse = requests.get(movie_link)
             movieSoup = BeautifulSoup(movieResponse.text, 'html.parser')
@@ -88,10 +88,10 @@ def scrape_movies(years, num_movies=100, debug=False) -> list:
             movie['name'] = movie_div.h3.a.text
             movie['year'] = year
             movie['date'] = movieSoup.find('meta', itemprop ='datePublished')['content']
-            
+
             genres = [genre.text for genre in movieSoup.findAll("span", itemprop="genre")]
-            movie['genres'] = genres
-            movie['keys'] = keys
+            movie['genres'] = genres.join(" ~ ")
+            movie['keywords'] = keywords
             movie['avg_rating'] = float(movie_div.strong.text)
             movie['num_votes'] = int(movie_div.find('span', attrs={'name': 'nv'})['data-value'])
             movie['url'] = base_url + temp_1
@@ -138,7 +138,7 @@ def scrape_reviews(movies, debug=False) -> list:
         broth = BeautifulSoup(main_content.text, 'lxml')
         while(broth.findAll('div', class_ = 'load-more-data')):
               for review_div in broth.find_all('div', class_='lister-item-content'):
-                spoiler = review_div.find('span', class_='spoiler-warning')   
+                spoiler = review_div.find('span', class_='spoiler-warning')
                 review = dict()
                 rating = review_div.find('span', class_='rating-other-user-rating')
                 if not rating:

@@ -9,7 +9,7 @@ import csv
 import json
 
 
-def export_to_csv(obj, file_name, first=False):
+def export_to_csv(obj, file_name, first=False, header=None):
     """Export a list of dictionaries to a csv file.
 
     Args:
@@ -19,10 +19,11 @@ def export_to_csv(obj, file_name, first=False):
     first (boolean): Whether this is the first batch to be exported
 
     """
-    keys = obj[0].keys()
-    write_type = first ? 'w' : 'a'
+    if not header:
+        header = obj[0].keys()
+    write_type = 'w' if first else 'a'
     with open(file_name, write_type) as output_file:
-        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer = csv.DictWriter(output_file, header)
         if first:
             dict_writer.writeheader()
         dict_writer.writerows(obj)
