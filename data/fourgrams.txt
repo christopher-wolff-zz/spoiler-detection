@@ -9,4 +9,3 @@ word                              n     prop
 8 one best films ever             1243 0.000541
 9 eternal sunshine spotless mind  1126 0.000490
 10 one best films year             1069 0.000465
-# ... with 90 more rows
