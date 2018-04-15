@@ -1,4 +1,4 @@
-    word    count    prop
+word      count   prop
  1 movie  2093634 0.0308
  2 film   1457922 0.0214
  3 one     864041 0.0127

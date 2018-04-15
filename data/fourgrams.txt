@@ -1,0 +1,12 @@
+word                              n     prop
+1 one best movies ever            2657 0.00116
+2 one worst movies ever           1812 0.000788
+3 worst movie ever seen           1744 0.000758
+4 one best movies seen            1570 0.000683
+5 best movies ever seen           1517 0.000660
+6 best movie ever seen            1404 0.000611
+7 worst movies ever seen          1303 0.000567
+8 one best films ever             1243 0.000541
+9 eternal sunshine spotless mind  1126 0.000490
+10 one best films year             1069 0.000465
+# ... with 90 more rows

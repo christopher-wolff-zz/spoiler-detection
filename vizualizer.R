@@ -119,18 +119,26 @@ ng <- paste(reviews$text[1:2], collapse = ' , ') %>%
   ngram(n = 2)
 get.phrasetable(ng)
 
-# table 2
-revs <- filter(reviews, word_count >= 2)
-ngs <- list()
-for (k in 0:80) {
-  ngs[k+1] <- ngram(reviews$text[(k*10000+1):((k+1)*10000+1)], n = 1) %>%
+# table 3 - ngrams
+revs <- filter(reviews, word_count >= 4)
+ngs <- ngram(reviews$text[1:10000], n = 4) %>%
+  get.phrasetable() %>%
+  as.tibble() %>%
+  head(10000)
+for (k in 1:80) {
+  ngs <- ngram(revs$text[(k*10000+1):((k+1)*10000)], n = 4) %>%
     get.phrasetable() %>%
     as.tibble() %>%
-    head(1000)
+    head(10000) %>%
+    rbind(ngs, .)
   print(paste0("Finished ", k))
 }
 
-
-for (k in 0:80) {
-  
-}
+results <- ngs %>%
+  group_by(ngrams) %>%
+  summarize(n = sum(freq)) %>%
+  arrange(desc(n))
+results <- results %>%
+  mutate(prop = n / sum(n)) %>%
+  head(100) %>%
+  mutate(ngrams = str_trim(ngrams))

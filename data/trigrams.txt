@@ -1,0 +1,11 @@
+words                  n    prop
+1 one best movies      8068 0.00471
+2 movie ever seen      7061 0.00412
+3 go see movie         6681 0.00390
+4 one best films       5950 0.00347
+5 movies ever seen     5393 0.00315
+6 saving private ryan  4977 0.00291
+7 seen long time       4039 0.00236
+8 based true story     3782 0.00221
+9 best movie ever      3770 0.00220
+10 new york city        3719 0.00217
