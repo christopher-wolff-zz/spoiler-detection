@@ -8,6 +8,12 @@ reviews <- read_csv("data/reviews_clean_nonstop.csv")
 movies_raw <- read_csv("data/movies_raw.csv")
 movies <- fromJSON(file = "data/movies_clean.json")
 
+# count words
+reviews <- reviews %>%
+  rowwise() %>%
+  mutate(word_count = wordcount(text)) %>%
+  ungroup()
+
 # plot 1
 ggplot(reviews, aes(x = rating)) +
   geom_histogram(bins = 10) +
@@ -64,11 +70,6 @@ ggplot(data = revs, mapping = aes(x = date_diff)) +
   )
 
 # plot 4
-reviews <- reviews %>%
-  rowwise() %>%
-  mutate(word_count = wordcount(text)) %>%
-  ungroup()
-
 reviews %>%
   mutate(spoiler = case_when(
     spoiler == 0 ~ "no",
@@ -123,12 +124,12 @@ get.phrasetable(ng)
 
 # table 3 - ngrams
 revs <- filter(reviews, word_count >= 4)
-ngs <- ngram(reviews$text[1:10000], n = 4) %>%
+ngs <- ngram(reviews$text[1:10000], n = 1) %>%
   get.phrasetable() %>%
   as.tibble() %>%
   head(10000)
 for (k in 1:80) {
-  ngs <- ngram(revs$text[(k*10000+1):((k+1)*10000)], n = 4) %>%
+  ngs <- ngram(reviews$text[(k*10000+1):((k+1)*10000)], n = 1) %>%
     get.phrasetable() %>%
     as.tibble() %>%
     head(10000) %>%
@@ -142,8 +143,11 @@ results <- ngs %>%
   arrange(desc(n))
 results <- results %>%
   mutate(prop = n / sum(n)) %>%
-  head(100) %>%
+  head(1000) %>%
   mutate(ngrams = str_trim(ngrams))
+results <- select(results, ngrams, n)
+
+write.csv(results, "data/top1000.csv", row.names = F)
 
 # movie analysis
 genres <- vector()
@@ -158,41 +162,68 @@ genres <- unique(genres)
 wanted_genres <- c("Romance", "Action", "Horror", "Fantasy")
 
 ratings_romance <- vector()
+names_romance <- vector()
+ids_romance <- vector()
+
 ratings_action <- vector()
+names_action <- vector()
+ids_action <- vector()
+
 ratings_horror <- vector()
+names_horror <- vector()
+ids_horror <- vector()
+
 ratings_fantasy <- vector()
+names_fantasy <- vector()
+ids_fantasy <- vector()
 
 for (movie in movies) {
   for (genre in movie$genres) {
     if (genre == "Romance") {
       ratings_romance <- append(ratings_romance, movie$avg_rating)
+      names_romance <- append(names_romance, movie$name)
+      ids_romance <- append(ids_romance, movie$id)
     }
     if (genre == "Action") {
       ratings_action <- append(ratings_action, movie$avg_rating)
+      names_action <- append(names_action, movie$name)
+      ids_action <- append(ids_action, movie$id)
     }
     if (genre == "Horror") {
       ratings_horror <- append(ratings_horror, movie$avg_rating)
+      names_horror <- append(names_horror, movie$name)
+      ids_horror <- append(ids_horror, movie$id)
     }
     if (genre == "Fantasy") {
       ratings_fantasy <- append(ratings_fantasy, movie$avg_rating)
+      names_fantasy <- append(names_fantasy, movie$name)
+      ids_fantasy <- append(ids_fantasy, movie$id)
     }
   }
 }
 
 r1 <- tibble(
   rating = ratings_romance,
+  name = names_romance,
+  id = ids_romance,
   genre = "Romance"
 )
 r2 <- tibble(
   rating = ratings_action,
+  name = names_action,
+  id = ids_action,
   genre = "Action"
 )
 r3 <- tibble(
   rating = ratings_horror,
+  name = names_horror,
+  id = ids_horror,
   genre = "Horror"
 )
 r4 <- tibble(
   rating = ratings_fantasy,
+  name = names_fantasy,
+  id = ids_fantasy,
   genre = "Fantasy"
 )
 
@@ -200,10 +231,10 @@ ratings <- rbind(r1, r2, r3, r4)
 ratings <- mutate(ratings, rating = as.numeric(rating))
 
 ggplot(ratings, aes(x = genre, y = rating)) +
-  geom_boxplot() +
+  geom_violin(draw_quantiles = c(.25, .50, .75)) +
   theme_bw() +
   labs(
-    title = "Movie rating comparison of different genres",
+    title = "Movie rating comparison for different genres",
     x = "Genre",
     y = "Rating"
   ) +
@@ -213,3 +244,20 @@ ggplot(ratings, aes(x = genre, y = rating)) +
     title = element_text(size = 16),
     legend.text = element_text(size = 16)
   )
+
+ratings %>%
+  filter(genre == "Action") %>%
+  arrange(desc(rating)) %>%
+  head(5)
+ratings %>%
+  filter(genre == "Fantasy") %>%
+  arrange(desc(rating)) %>%
+  head(5)
+ratings %>%
+  filter(genre == "Horror") %>%
+  arrange(desc(rating)) %>%
+  head(5)
+ratings %>%
+  filter(genre == "Romance") %>%
+  arrange(desc(rating)) %>%
+  head(5)

@@ -1,0 +1,27 @@
+unigrams:
+
+not spoiler:
+word       n
+1 movie  1451448
+2 film   1008344
+3 one     576620
+4 like    512028
+5 good    428791
+6 story   368593
+7 really  338112
+8 see     333871
+9 would   321427
+10 great   311656
+
+spoiler:
+word     n
+1 movie  651817
+2 film   455982
+3 one    291036
+4 like   275804
+5 good   197040
+6 would  190953
+7 really 172454
+8 story  171668
+9 see    157938
+10 time   151088

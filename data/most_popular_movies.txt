@@ -1,0 +1,27 @@
+rating name                  id      genre
+1   8.80 Inception             1375666 Action
+2   8.70 The Matrix            0133093 Action
+3   8.50 Gladiator             0172495 Action
+4   8.40 The Dark Knight Rises 1345836 Action
+5   8.30 Batman Begins         0372784 Action
+
+rating name                                              id      genre
+1   8.90 The Lord of the Rings: The Return of the King     0167260 Fantasy
+2   8.80 The Lord of the Rings: The Fellowship of the Ring 0120737 Fantasy
+3   8.70 The Lord of the Rings: The Two Towers             0167261 Fantasy
+4   8.50 The Green Mile                                    0120689 Fantasy
+5   8.20 PK                                                2338151 Fantasy
+
+rating name              id      genre
+1   8.00 Shaun of the Dead 0365748 Horror
+2   7.70 Zombieland        1156398 Horror
+3   7.70 Get Out           5052448 Horror
+4   7.60 The Others        0230600 Horror
+5   7.60 28 Days Later...  0289043 Horror
+
+rating name                                  id      genre
+1   8.30 Amélie                                0211915 Romance
+2   8.30 Eternal Sunshine of the Spotless Mind 0338013 Romance
+3   8.10 Before Sunset                         0381681 Romance
+4   8.00 Slumdog Millionaire                   1010048 Romance
+5   8.00 The Perks of Being a Wallflower       1659337 Romance
