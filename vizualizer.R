@@ -1,10 +1,12 @@
 library(tidyverse)
 library(scales)
 library(ngram)
+library(rjson)
 
 # load data
 reviews <- read_csv("data/reviews_clean_nonstop.csv")
-movies <- read_csv("data/movies_raw.csv")
+movies_raw <- read_csv("data/movies_raw.csv")
+movies <- fromJSON(file = "data/movies_clean.json")
 
 # plot 1
 ggplot(reviews, aes(x = rating)) +
@@ -142,3 +144,44 @@ results <- results %>%
   mutate(prop = n / sum(n)) %>%
   head(100) %>%
   mutate(ngrams = str_trim(ngrams))
+
+# movie analysis
+genres <- vector()
+for (movie in movies) {
+  for (genre in movie$genres) {
+    genres <- append(genres, genre)
+  }
+}
+genres <- unique(genres)
+
+# plot 7
+movies_romance <- list()
+movies_action <- list()
+movies_horror <- list()
+movies_fantasy <- list()
+
+wanted_genres <- c("Romance", "Action", "Horror", "Fantasy")
+
+for (movie in movies) {
+  for (genre in movie$genres) {
+    if (genre == "Romance") {
+      movies_romance <- append(movies_romance, movie)
+    }
+    if (genre == "Action") {
+      movies_action <- append(movies_action, movie)
+    }
+    if (genre == "Horror") {
+      movies_horror <- append(movies_horror, movie)
+    }
+    if (genre == "Fantasy") {
+      movies_fantasy <- append(movies_fantasy, movie)
+    }
+  }
+}
+
+ratings_romance <- vector()
+ratings_action <- vector()
+ratings_horror <- vector()
+ratings_fantasy <- vector()
+
+ggplot()

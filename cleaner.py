@@ -90,11 +90,17 @@ def remove_stopwords(reviews, debug=False):
         if debug and (k + 1) % 100 == 0:
             print('Finished cleaning %d reviews' % (k + 1))
 
+def clean_movies(movies, debug=False):
+    """Clean movies."""
+    for k, movie in enumerate(movies):
+        movie['genres'] = movie['genres'].split(' $$$ ')
+        movie['keyWords'] = movie['keyWords'].split(' $$$ ')
+
 
 if __name__ == '__main__':
-    with open('data/reviews_clean.csv', 'r') as input_file:
+    with open('data/movies_raw.csv', 'r') as input_file:
        reader = csv.DictReader(input_file)
        header = reader.fieldnames
-       reviews = list(reader)
-       remove_stopwords(reviews, debug=True)
-       export_to_csv(reviews, 'data/reviews_clean_nonstop.csv', first=True)
+       movies = list(reader)
+       clean_movies(movies, debug=True)
+       export_to_json(movies, 'data/movies_clean.json')
