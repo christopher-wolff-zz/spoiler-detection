@@ -155,33 +155,61 @@ for (movie in movies) {
 genres <- unique(genres)
 
 # plot 7
-movies_romance <- list()
-movies_action <- list()
-movies_horror <- list()
-movies_fantasy <- list()
-
 wanted_genres <- c("Romance", "Action", "Horror", "Fantasy")
-
-for (movie in movies) {
-  for (genre in movie$genres) {
-    if (genre == "Romance") {
-      movies_romance <- append(movies_romance, movie)
-    }
-    if (genre == "Action") {
-      movies_action <- append(movies_action, movie)
-    }
-    if (genre == "Horror") {
-      movies_horror <- append(movies_horror, movie)
-    }
-    if (genre == "Fantasy") {
-      movies_fantasy <- append(movies_fantasy, movie)
-    }
-  }
-}
 
 ratings_romance <- vector()
 ratings_action <- vector()
 ratings_horror <- vector()
 ratings_fantasy <- vector()
 
-ggplot()
+for (movie in movies) {
+  for (genre in movie$genres) {
+    if (genre == "Romance") {
+      ratings_romance <- append(ratings_romance, movie$avg_rating)
+    }
+    if (genre == "Action") {
+      ratings_action <- append(ratings_action, movie$avg_rating)
+    }
+    if (genre == "Horror") {
+      ratings_horror <- append(ratings_horror, movie$avg_rating)
+    }
+    if (genre == "Fantasy") {
+      ratings_fantasy <- append(ratings_fantasy, movie$avg_rating)
+    }
+  }
+}
+
+r1 <- tibble(
+  rating = ratings_romance,
+  genre = "Romance"
+)
+r2 <- tibble(
+  rating = ratings_action,
+  genre = "Action"
+)
+r3 <- tibble(
+  rating = ratings_horror,
+  genre = "Horror"
+)
+r4 <- tibble(
+  rating = ratings_fantasy,
+  genre = "Fantasy"
+)
+
+ratings <- rbind(r1, r2, r3, r4)
+ratings <- mutate(ratings, rating = as.numeric(rating))
+
+ggplot(ratings, aes(x = genre, y = rating)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(
+    title = "Movie rating comparison of different genres",
+    x = "Genre",
+    y = "Rating"
+  ) +
+  theme(
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16),
+    title = element_text(size = 16),
+    legend.text = element_text(size = 16)
+  )
