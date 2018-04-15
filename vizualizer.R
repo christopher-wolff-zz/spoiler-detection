@@ -1,5 +1,6 @@
 library(tidyverse)
 library(scales)
+library(ngram)
 
 # load data
 reviews <- read_csv("data/reviews_cleanV3.csv")
@@ -37,19 +38,10 @@ revs <- revs %>%
   mutate(date_diff = as.numeric(difftime(date.x, date.y, units = "days")))
 
 ggplot(revs, aes(x = date_diff, y = spoiler)) +
-  geom_point()
+  geom_point(alpha = 0.01, size = 1) +
+  geom_smooth(method = "gam")
 
-revs %>%
-  filter(date_diff == min(revs$date_diff)) %>%
-  View()
-
-revs %>%
-  filter(date_diff < -100) %>%
-  nrow()
-
-movies %>%
-  filter(id == "0485947")
-
+# plot 3
 ggplot(data = revs, mapping = aes(x = date_diff)) +
   geom_histogram(
     bins = 200,
@@ -69,3 +61,7 @@ ggplot(data = revs, mapping = aes(x = date_diff)) +
     axis.title = element_text(size = 16),
     title = element_text(size = 16)
   )
+
+# plot 4
+reviews %>%
+  mutate()
