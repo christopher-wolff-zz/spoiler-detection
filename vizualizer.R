@@ -63,5 +63,46 @@ ggplot(data = revs, mapping = aes(x = date_diff)) +
   )
 
 # plot 4
+reviews <- reviews %>%
+  rowwise() %>%
+  mutate(word_count = wordcount(text)) %>%
+  ungroup()
+
 reviews %>%
-  mutate()
+  mutate(spoiler = case_when(
+    spoiler == 0 ~ "no",
+    spoiler == 1 ~ "yes"
+  )) %>%
+ggplot(aes(x = word_count)) +
+  geom_density(aes(fill = factor(spoiler)), alpha = 0.7) +
+  theme_bw() +
+  labs(
+    title = "Review word count distribution",
+    subtitle = "for spoilers vs. non-spoilers",
+    x = "Number of words",
+    y = "Density"
+  ) +
+  scale_x_continuous(limit = c(0, 1000)) +
+  scale_fill_discrete(name = "Spoiler") +
+  theme(
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16),
+    title = element_text(size = 16)
+  )
+
+# plot 5
+reviews %>%
+  ggplot(aes(x = word_count, y = num_helpful_yes)) +
+  geom_smooth(method = "lm") +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16),
+    title = element_text(size = 16)
+  ) +
+  labs(
+    title = "Number of 'helpful' votes vs. review length",
+    subtitle = "estimated by a linear regression model",
+    x = "Number of words",
+    y = "Number of 'helpful' votes"
+  )
