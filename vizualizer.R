@@ -3,8 +3,8 @@ library(scales)
 library(ngram)
 
 # load data
-reviews <- read_csv("data/reviews_cleanV3.csv")
-movies <- read_csv("data/movies_rawV3.csv")
+reviews <- read_csv("data/reviews_clean_nonstop.csv")
+movies <- read_csv("data/movies_raw.csv")
 
 # plot 1
 ggplot(reviews, aes(x = rating)) +
@@ -12,8 +12,7 @@ ggplot(reviews, aes(x = rating)) +
   theme_bw()
 
 ggplot(data = reviews, mapping = aes(x = rating)) +
-  geom_histogram(
-    bins = 10,
+  geom_bar(
     color = "black",
     fill = "white"
   ) +
@@ -121,6 +120,17 @@ ng <- paste(reviews$text[1:2], collapse = ' , ') %>%
 get.phrasetable(ng)
 
 # table 2
-ngram(reviews$text, n = 2) %>%
-  get.phrasetable() %>%
-  head(10)
+revs <- filter(reviews, word_count >= 2)
+ngs <- list()
+for (k in 0:80) {
+  ngs[k+1] <- ngram(reviews$text[(k*10000+1):((k+1)*10000+1)], n = 1) %>%
+    get.phrasetable() %>%
+    as.tibble() %>%
+    head(1000)
+  print(paste0("Finished ", k))
+}
+
+
+for (k in 0:80) {
+  
+}
