@@ -10,7 +10,7 @@ ggplot(reviews, aes(x = rating)) +
   geom_histogram(bins = 10) +
   theme_bw()
 
-gg <- ggplot(data = reviews, mapping = aes(x = rating)) +
+ggplot(data = reviews, mapping = aes(x = rating)) +
   geom_histogram(
     bins = 10,
     color = "black",
@@ -22,25 +22,50 @@ gg <- ggplot(data = reviews, mapping = aes(x = rating)) +
   ) +
   theme_minimal() +
   scale_x_continuous(breaks = 1:10) +
-  scale_y_continuous(label = comma)
-
-png("plots/ratings_histogram.png")
-print(gg)
-dev.off()
+  scale_y_continuous(label = comma) +
+  theme(
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16),
+    title = element_text(size = 16)
+  )
 
 # plot 2
 revs <- movies %>%
   select(id, date) %>%
   left_join(reviews, ., by = c("movie_id" = "id"))
 revs <- revs %>%
-  mutate(date_diff = difftime(date.x, date.y, units = "days"))
+  mutate(date_diff = as.numeric(difftime(date.x, date.y, units = "days")))
 
 ggplot(revs, aes(x = date_diff, y = spoiler)) +
   geom_point()
 
-filter(revs, date_diff < 0) %>%
-  group_by(movie_id) %>%
-  count() %>%
-  arrange(desc(n)) %>%
+revs %>%
+  filter(date_diff == min(revs$date_diff)) %>%
   View()
-max(revs$date_diff)
+
+revs %>%
+  filter(date_diff < -100) %>%
+  nrow()
+
+movies %>%
+  filter(id == "0485947")
+
+ggplot(data = revs, mapping = aes(x = date_diff)) +
+  geom_histogram(
+    bins = 200,
+    color = "black",
+    fill = "white"
+  ) +
+  labs(
+    title = "Differences between review dates and movie US release dates",
+    x = "Time difference (days)",
+    y = "Count"
+  ) +
+  scale_x_continuous(limits = c(-100, 500)) +
+  scale_y_continuous(label = comma) +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16),
+    title = element_text(size = 16)
+  )
