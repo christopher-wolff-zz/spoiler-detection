@@ -19,6 +19,7 @@ __date__ = '3/19/2018'
 
 import csv
 import json
+from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 from helper import export_to_csv
@@ -79,20 +80,21 @@ def clean_reviews(reviews, debug=False):
             print('Finished cleaning %d reviews' % (k + 1))
 
 
-def reviews_to_sentences(reviews, debug=False):
-    """Convert the list of reviews to a list of sentences."""
-    sentences = list()
+def remove_stopwords(reviews, debug=False):
+    """Remove stopwords from reviews."""
+    stop_words = set(stopwords.words('english'))
     for k, review in enumerate(reviews):
-
-
+        text = review['text']
+        rev = [word for word in text.split(' ') if word not in stop_words]
+        review['text'] = ' '.join(rev)
         if debug and (k + 1) % 100 == 0:
             print('Finished cleaning %d reviews' % (k + 1))
 
 
 if __name__ == '__main__':
-    with open('data/reviews_tempV3.csv', 'r') as input_file:
+    with open('data/reviews_clean.csv', 'r') as input_file:
        reader = csv.DictReader(input_file)
        header = reader.fieldnames
        reviews = list(reader)
-       clean_reviews(reviews, debug=True)
-       export_to_csv(reviews, 'data/reviews_cleanV3.csv', first=True)
+       remove_stopwords(reviews, debug=True)
+       export_to_csv(reviews, 'data/reviews_clean_nonstop.csv', first=True)

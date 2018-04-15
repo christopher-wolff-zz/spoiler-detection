@@ -87,7 +87,8 @@ ggplot(aes(x = word_count)) +
   theme(
     axis.text = element_text(size = 16),
     axis.title = element_text(size = 16),
-    title = element_text(size = 16)
+    title = element_text(size = 16),
+    legend.text = element_text(size = 16)
   )
 
 # plot 5
@@ -106,3 +107,20 @@ reviews %>%
     x = "Number of words",
     y = "Number of 'helpful' votes"
   )
+
+# plot 6
+ngram(text, n = 2)
+
+# table 1
+reviews %>%
+  group_by(spoiler) %>%
+  count()
+
+ng <- paste(reviews$text[1:2], collapse = ' , ') %>%
+  ngram(n = 2)
+get.phrasetable(ng)
+
+# table 2
+ngram(reviews$text, n = 2) %>%
+  get.phrasetable() %>%
+  head(10)
