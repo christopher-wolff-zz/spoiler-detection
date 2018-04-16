@@ -1,0 +1,11 @@
+words n prop
+1 special effects 67391 0.00717
+2 one best 47302 0.00503
+3 star wars 45948 0.00489
+4 see movie 43735 0.00465
+5 even though 40561 0.00432
+6 good movie 38791 0.00413
+7 ever seen 37337 0.00397
+8 go see 34708 0.00369
+9 great movie 29316 0.00312
+10 much better 28448 0.00303
