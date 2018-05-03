@@ -73,7 +73,8 @@ export default {
     pyth: function(){
         alert("Starting AJAX")
         $.ajax({
-            url: "../determ.py",
+            type: 'POST',
+            url: "./../determ.py",
             success: function(data){
                 console.log(data)
             }

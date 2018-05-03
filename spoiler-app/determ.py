@@ -18,11 +18,18 @@ import spacy
 from spacy import displacy
 from spacy.symbols import nsubj, nsubjpass, VERB
 import en_core_web_sm
+import cherrypy
 
-nlp = en_core_web_sm.load()
-nlp.add_pipe(nlp.create_pipe('sentencizer'))
+class HelloWorld(object):
+    nlp = en_core_web_sm.load()
+    nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
-subj_verbs = list()
+    subj_verbs = list()
 
-print("YEET")
-sys.stdout.flush()
+    print("YEET")
+    sys.stdout.flush()
+    def apple():
+        print("aplpe")
+        return 8
+    
+cherrypy.quickstart(HelloWorld())
