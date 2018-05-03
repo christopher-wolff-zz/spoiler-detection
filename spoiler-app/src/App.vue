@@ -7,10 +7,18 @@
         <textarea name="paragraph_text" v-model="inputReview" cols="50" rows="10" placeholder="Input a new review."></textarea>
         <br>
         <button type="button" @click="addReview(inputReview, false, reviewtitle)">Add a Review</button>
+        <div id="range">
+            <select v-model="val">
+                <option v-for="option in options" v-bind:value="option">{{option}}</option>
+            </select>
+        </div>
+        <h6> Filtered out spoilers with a {{val}}0% chance of being a spoiler </h6>
     </div>
-    <div id="nonspoilers" v-for="non in nons">
-        <h3>{{non.title}}</h3>
+    <div id="nonspoilers" v-for="non in nons" v-if="non.spoil * 10 < val">
+        <h4>{{non.title}}</h4>
         <p>{{non.rev}}</p>
+        <p>Spoiler Probability: {{non.spoil}}</p>
+        <button @click="deleteRev(non.title)">Delete Review</button>
     </div>
     <div id="audio">
         <audio controls autoplay loop>
@@ -43,7 +51,11 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
       inputReview: '',
-      reviewtitle: ''
+      reviewtitle: '',
+      val: 5,
+      options: [
+        0,1,2,3,4,5,6,8,9,10
+      ]
     }
   },
   firebase:{
@@ -57,10 +69,11 @@ export default {
                 alert("Finish filling out all info before submitting.")
             }
             else{
-                this.pyth()
+                spoil = Math.random()
                 db.ref("non/" + title).set({
                     rev,
-                    title
+                    title,
+                    spoil
                 })
                 this.inputReview = ''
                 this.reviewtitle = ''
@@ -75,10 +88,14 @@ export default {
         $.ajax({
             type: 'POST',
             url: "./../determ.py",
+            data:{param: "xyz"},
             success: function(data){
                 console.log(data)
             }
         })
+    },
+    deleteRev: function(title){
+        db.ref("non/" + title).remove()
     }
     }
 }
@@ -122,10 +139,14 @@ html{
 }
 header{
     display: flex;
-    marigin: auto;
     align-items: center;
     justify-content: center;
     
+}
+h6{
+    background-color:#D3D3D3;
+    margin: auto;
+    width:25%;
 }
 
 </style>
