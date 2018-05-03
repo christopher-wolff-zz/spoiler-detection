@@ -12,11 +12,11 @@
                 <option v-for="option in options" v-bind:value="option">{{option}}</option>
             </select>
         </div>
-        <h6> Filtered out spoilers with a {{val}}0% chance of being a spoiler </h6>
+        <h6> See spoilers with no more than {{val}}0% chance of being a spoiler.</h6>
     </div>
     <div id="nonspoilers" v-for="non in nons" v-if="non.spoil * 10 < val">
         <h4>{{non.title}}</h4>
-        <p>{{non.rev}}</p>
+        <p>{{non.compRev}}</p>
         <p>Spoiler Probability: {{non.spoil}}</p>
         <button @click="deleteRev(non.title)">Delete Review</button>
     </div>
@@ -64,40 +64,56 @@ export default {
   },
   methods:{
     addReview: function(rev, spoil, title){
-        if(confirm("Are you sure you want to submit this review?")){
             if(title === '' || rev === ''){
                 alert("Finish filling out all info before submitting.")
             }
             else{
-                spoil = Math.random()
+                var compRev = rev
+                var cou = 0
+                var words = ["kylo-ren", "kylo", "ren", "rey", "dies", "die", "died", "destroy", "destroyed", "finn", "Kylo", "death", "Skywalker", "Luke", "luke", "Rey", "kill", "killed", "kills", "princess", "fought", "death-star", "emperor", "han", "Han", "Solo", "Han-Solo", "solo"]
+                for(var i = 0; i < words.length; i++){
+                    cou += rev.toLowerCase().split(words[i].toLowerCase()).length - 1
+                }
+                spoil = Math.random()/3
+                console.log(spoil)
+                spoil += cou /(compRev.split(" ").length)
+                var bad = ["han solo dies", "han dies", "solo died", "solo dies", "han died", "ren kills", "kylo kills", "kylo killed", "ren killed"]
+                for(var i = 0; i < words.length; i++){
+                    if(rev.toLowerCase().includes(bad[i])){
+                        spoil += 0.1
+                    }
+                }
+                if(spoil >= 1){
+                    spoil = 0.9
+                }
                 db.ref("non/" + title).set({
-                    rev,
+                    compRev,
                     title,
                     spoil
                 })
+                alert("This review has been tagged as: " + spoil + " likely to contain a spoiler.")
                 this.inputReview = ''
                 this.reviewtitle = ''
             }    
-        }
-        else{
-            alert("Then finish the review.")
-        }
     },
     pyth: function(){
         alert("Starting AJAX")
+        console.log("APPPPPPLE")
         $.ajax({
             type: 'POST',
-            url: "./../determ.py",
-            data:{param: "xyz"},
+            url: "http://localhost:8080/",
             success: function(data){
                 console.log(data)
             }
         })
     },
+    test: function(){
+        
+    },
     deleteRev: function(title){
         db.ref("non/" + title).remove()
     }
-    }
+    },
 }
 
 </script>
