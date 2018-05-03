@@ -16,17 +16,14 @@ import cgi
 from collections import OrderedDict
 from operator import itemgetter
 import numpy as np
-import _pickle as cPickle
+import pickle
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import SVC
-import spacy
-from spacy import displacy
-from spacy.symbols import nsubj, nsubjpass, VERB
-import en_core_web_sm
 from urllib.parse import parse_qs, urlparse
 
-nlp = en_core_web_sm.load()
-nlp.add_pipe(nlp.create_pipe('sentencizer'))
+mnb = pickle.load(open('./mnb.pkl', 'rb'))
+vec = pickle.load(open('./vec.pkl', 'rb'))
 
 class S(BaseHTTPRequestHandler):
     def _set_response(self):
@@ -35,7 +32,7 @@ class S(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        logging.info("GET request,\nPath: %s\nHeaders:\n%s\n", str(self.path), str(self.headers))
+        pass
         self._set_response()
         self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
 
@@ -45,21 +42,11 @@ class S(BaseHTTPRequestHandler):
         self._set_response()
         index = post_data.find('data=')
         review_text = str(post_data[index + 5:].replace('%20', ' '))
-        pairs = []
-        print(review_text)
-        doc = nlp(review_text)
-        for k, sentence in enumerate(doc.sents):
-            for token in sentence:
-                print(token)
-                print(token.dep_)
-                if (token.dep == nsubj or token.dep == nsubjpass) and token.head.pos == VERB:
-                    compounds = [child.lower_ for child in token.children if child.dep_ == 'compound']
-                    compounds.append(token.lower_)
-                    pairs.append('-'.join(compounds) + '|' + token.head.lemma_.lower())
-        subj_verb = ', '.join(pairs)
-
-        x = [subj_verb]
-        print(x)
+        v = CountVectorizer(vocabulary=vec.vocabulary_)
+        x = [review_text]
+        x_in = v.fit_transform(x)
+        y = mnb.predict_proba(x_in)
+        self.wfile.write(str(y[0][1]).encode('utf-8'))
 
 def run(server_class=HTTPServer, handler_class=S, port=80):
     server_address = ('', port)

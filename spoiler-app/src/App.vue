@@ -143,6 +143,7 @@ header{
     justify-content: center;
     
 }
+
 h6{
     background-color:#D3D3D3;
     margin: auto;
